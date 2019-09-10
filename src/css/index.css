@@ -1,0 +1,13 @@
+html, body {
+  height: 100%;
+  font-size: 25px;
+}
+
+#hri_text {
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  top: 30%;
+  left: 30%;
+  background-color: red;
+}

@@ -3,21 +3,29 @@
 <head>
   <meta name="viewport" content="width=device-width"/>
   <meta charset="utf-8">
+  <link type="text/css" rel="stylesheet" href="css/index.css"/>
+  <!--
   <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
-  <link type="text/css" rel="stylesheet" href="index.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
   <script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+  -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/eventemitter2.min.js"></script>
+  <script type="text/javascript" src="js/roslib.min.js"></script>
 </head>
 
 <body>
-  <p id="texttaxi">Dialog info</p>
+  <div id="hri_text">HRI info</div>
 
   <script>
+
+    var cnt = 0;
+
     var ros = new ROSLIB.Ros({
-      //url : 'ws://10.60.0.1:9090'
-      url : 'ws://10.1.132.164:9090'
+      url : 'ws://localhost:9090'
     });
 
     ros.on('connection', function() {
@@ -30,6 +38,18 @@
 
     ros.on('close', function() {
       console.log('Connection to websocket server closed.');
+    });
+
+    var hri_listener = new ROSLIB.Topic({
+      ros : ros,
+      name : '/dialog_gui',
+      messageType : 'std_msgs/String'
+    });
+
+    hri_listener.subscribe(function(message) {
+      cnt++;
+      console.log('Received message on ' + hri_listener.name + ': ' + message.data + " - " + cnt);
+      document.getElementById("hri_text").innerHTML = message.data + " " + cnt;
     });
 
   </script>
