@@ -18,6 +18,7 @@
 </head>
 
 <body>
+  <div id="is_listening_text">LISTENING...</div>
   <div id="hri_text">HRI info</div>
 
   <script>
@@ -46,10 +47,26 @@
       messageType : 'std_msgs/String'
     });
 
+    var is_listening = new ROSLIB.Topic({
+      ros : ros,
+      name : '/is_listening',
+      messageType : 'std_msgs/Bool'
+    });
+
     hri_listener.subscribe(function(message) {
       cnt++;
-      console.log('Received message on ' + hri_listener.name + ': ' + message.data + " - " + cnt);
       document.getElementById("hri_text").innerHTML = message.data + " " + cnt;
+    });
+
+    is_listening.subscribe(function(message) {
+      console.log('Received message on ' + is_listening.name + ': ' + message.data);
+      if (message.data == true){
+        console.log('true processed');
+        document.getElementById("is_listening_text").style.visibility = "visible";
+      }else{
+        console.log('false processed');
+        document.getElementById("is_listening_text").style.visibility = "hidden";
+      }
     });
 
   </script>
